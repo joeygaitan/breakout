@@ -26,10 +26,11 @@ var x = boxScript.width/2;
 var y = boxScript.height-30;
 var dx = 2;
 var dy = -2;
+var ballRadius = 10;
 
 const drawBall = () =>{
     valueBoxScript.beginPath();
-    valueBoxScript.arc(x, y, 10, 0, Math.PI*2);
+    valueBoxScript.arc(x, y, ballRadius, 0, Math.PI*2);
     valueBoxScript.fillStyle = "#0095DD";
     valueBoxScript.fill();
     valueBoxScript.closePath();
@@ -40,6 +41,12 @@ const draw = () => {
     drawBall();
     x += dx;
     y += dy;
+    if(x + dx > boxScript.width-ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+    }
+    if(y + dy > boxScript.height-ballRadius || y + dy < ballRadius) {
+        dy = -dy;
+    }
 }
 setInterval(draw, 10);
 
