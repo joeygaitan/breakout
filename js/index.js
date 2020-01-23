@@ -76,8 +76,7 @@ const collisionDetection = () => {
 };
 
 const drawBall = () => {
-
-  const randomColors = ['red', 'blue', 'green', 'orange', 'yellow',' lightgray','pink'];
+  const randomColors = ['red', 'blue', 'green', 'orange', 'yellow', 'lightgray', 'pink'];
   const color = randomColors[Math.floor(Math.random() * randomColors.length - 1)];
 
   ctx.beginPath();
