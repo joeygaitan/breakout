@@ -1,36 +1,13 @@
-
-
-let boxScript = document.querySelector('.boxScript');
-
-let valueBoxScript = boxScript.getContext('2d');
-
-// valueBoxScript.beginPath();
-// valueBoxScript.rect(20, 40, 50, 50);
-// valueBoxScript.fillStyle = "#0095DD";
-// valueBoxScript.fill();
-// valueBoxScript.closePath();
-
-// valueBoxScript.beginPath();
-// valueBoxScript.arc(240, 160, 20, 0, Math.PI*2, false);
-// valueBoxScript.fillStyle = "green";
-// valueBoxScript.fill();
-// valueBoxScript.closePath();
-
-// valueBoxScript.beginPath();
-// valueBoxScript.rect(160, 10, 100, 40);
-// valueBoxScript.strokeStyle = "rgba(0, 0, 255, 0.5)";
-// valueBoxScript.stroke();
-// valueBoxScript.closePath();
-
-var x = boxScript.width/2;
-var y = boxScript.height-30;
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+var ballRadius = 10;
+var x = canvas.width/2;
+var y = canvas.height-30;
 var dx = 2;
 var dy = -2;
-var ballRadius = 10;
-
 var paddleHeight = 10;
 var paddleWidth = 75;
-var paddleX = (boxScript.width-paddleWidth) / 2;
+var paddleX = (canvas.width-paddleWidth)/2;
 var rightPressed = false;
 var leftPressed = false;
 
@@ -55,13 +32,12 @@ function keyUpHandler(e) {
     }
 }
 
-
-const drawBall = () =>{
-    valueBoxScript.beginPath();
-    valueBoxScript.arc(x, y, ballRadius, 0, Math.PI*2);
-    valueBoxScript.fillStyle = "#0095DD";
-    valueBoxScript.fill();
-    valueBoxScript.closePath();
+function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
 }
 
 function drawPaddle() {
@@ -72,36 +48,33 @@ function drawPaddle() {
     ctx.closePath();
 }
 
-const draw = () => {
-    valueBoxScript.clearRect(0, 0, boxScript.width, boxScript.height);
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
-    x += dx;
-    y += dy;
-    if(x + dx > boxScript.width-ballRadius || x + dx < ballRadius) {
+    drawPaddle();
+    
+    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
         dx = -dx;
     }
-    if(y + dy > boxScript.height-ballRadius || y + dy < ballRadius) {
+    if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
         dy = -dy;
     }
+    
+    if(rightPressed) {
+        paddleX += 7;
+        if (paddleX + paddleWidth > canvas.width){
+            paddleX = canvas.width - paddleWidth;
+        }
+    }
+    else if(leftPressed) {
+        paddleX -= 7;
+        if (paddleX < 0){
+            paddleX = 0;
+        }
+    }
+    
+    x += dx;
+    y += dy;
 }
+
 setInterval(draw, 10);
-
-// for(let i =1;i<=12;i++){
-//     const x = (100 * i % 3) + 30
-//     const y = 100 * Math.floor(100 / i)
-
-
-
-//     // if(i>=4){
-
-//     // }else if(i>4 && i<=8){
-
-//     // }else if(i>8 && i<=12){
-
-//     // }
-// }
-
-//responsive web formula
-//1. listen for changes in window size
-//2. update size of canvas
-//3. notifiy program about new canvas size
