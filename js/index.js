@@ -76,9 +76,13 @@ const collisionDetection = () => {
 };
 
 const drawBall = () => {
+
+  const randomColors = ['red', 'blue', 'green', 'orange', 'yellow',' lightgray','pink'];
+  const color = randomColors[Math.floor(Math.random() * randomColors.length - 1)];
+
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = color;
   ctx.fill();
   ctx.closePath();
 };
