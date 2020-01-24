@@ -1,12 +1,12 @@
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-const ballRadius = 10;
+let ballRadius = 10;
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
 const paddleHeight = 10;
-const paddleWidth = 75;
+let paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
@@ -19,6 +19,7 @@ const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
 let score = 0;
 let lives = 3;
+let level = 0;
 
 const bricks = [];
 for (let c = 0; c < brickColumnCount; c += 1) {
@@ -66,8 +67,8 @@ const collisionDetection = () => {
           score += 1;
           if (score === brickRowCount * brickColumnCount) {
             // eslint-disable-next-line no-alert
-            alert('YOU WIN, CONGRATS!');
-            document.location.reload();
+            level += 1;
+            console.log(level);
           }
         }
       }
@@ -77,7 +78,7 @@ const collisionDetection = () => {
 
 const drawBall = () => {
   const randomColors = ['red', 'blue', 'green', 'orange', 'yellow', 'lightgray', 'pink'];
-  const color = randomColors[Math.floor(Math.random() * randomColors.length - 1)];
+  const color = randomColors[Math.floor(Math.random() * randomColors.length)];
 
   ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
@@ -122,6 +123,12 @@ const drawLives = () => {
   ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
 };
 
+const drawLevel = () => {
+  ctx.font = '16px Arial';
+  ctx.fillStyle = '#0095DD';
+  ctx.fillText(`Lives: ${level}`, canvas.width / 2, 20);
+};
+
 const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBricks();
@@ -138,8 +145,13 @@ const draw = () => {
     dy = -dy;
   } else if (y + dy > canvas.height - ballRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
+      if (ballRadius >= 1.5) {
+        ballRadius -= 1.5;
+      }
       dy = -dy;
     } else {
+      paddleWidth += 15;
+      ballRadius += 2;
       lives -= 1;
       if (!lives) {
         // eslint-disable-next-line no-alert
