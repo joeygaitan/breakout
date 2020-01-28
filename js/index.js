@@ -76,7 +76,7 @@ document.addEventListener('mousemove', mouseMoveHandler, false);
 const restoreObjects = () => {
   bricks.map((row) => {
     return row.map((object) => {
-      return object.status = 2
+      return object.status = 1
     });
   });
 }
@@ -208,36 +208,61 @@ const draw = () => {
 draw();
 
 
+class Paddle {
+  constructor(color = 'red'){
+    this.color = color
+    this.paddleHeight = 10;
+    this.paddleWidth = 75;
+    this.paddleX = (canvas.width - paddleWidth) / 2;
+  }
+
+  render = (ctx) => {
+    ctx.beginPath();
+    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.closePath();
+  }
+}
+
 class Ball {
-  constructor() {
+  constructor(color = 'red') {
+    this.color = color
     this.x = 0
     this.y = 0
     this.dx = 2
     this.dy = 2
+    this.ballRadius = 10
   }
 
   move() {
     this.x += this.dx
   }
 
-  render(ctx) {
-    ctx.beginPath()
+
+
+  render = (ctx) => {
+    const color = this.color
+
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.ballRadius, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.closePath();
   }
 }
 
 class Game {
-  constructor(levels){
+  constructor(levels, idTag){
 
-    this.gameCanvas = {
-      canvas: document.getElementById('myCanvas'),
-      ctx: canvas.getContext('2d')
-    }
+    this.canvas = document.getElementById(idTag),
+    this.ctx = getContext('2d')
 
-    this.level = level
+    this.level = 0
     this.lives = 3
-    this.
+    this.score = 0
 
-    this.ball = new Ball()
+    this.ball = new Ball('red')
     this.ball.render(this.gameCanvas.ctx)
     
     this.ball = {
