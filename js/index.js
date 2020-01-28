@@ -1,15 +1,25 @@
+// canvas tag
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
+
+// ball radius
 let ballRadius = 10;
+// ball movement
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
+
+// paddle properties and movement
 const paddleHeight = 10;
 let paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
+
+// button variables that detect tough
 let rightPressed = false;
 let leftPressed = false;
+
+// brick count, size, and location on the page
 const brickRowCount = 5;
 const brickColumnCount = 3;
 const brickWidth = 75;
@@ -17,10 +27,13 @@ const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
+
+// scores, lives, and levels
 let score = 0;
 let lives = 3;
 let level = 0;
 
+// this forloop builds the bricks layout
 const bricks = [];
 for (let c = 0; c < brickColumnCount; c += 1) {
   bricks[c] = [];
@@ -29,6 +42,7 @@ for (let c = 0; c < brickColumnCount; c += 1) {
   }
 }
 
+// function to check for right error key
 const keyDownHandler = (e) => {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
     rightPressed = true;
@@ -37,6 +51,7 @@ const keyDownHandler = (e) => {
   }
 };
 
+// this turns off the 
 const keyUpHandler = (e) => {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
     rightPressed = false;
@@ -45,6 +60,7 @@ const keyUpHandler = (e) => {
   }
 };
 
+// this will capture mouse movement
 const mouseMoveHandler = (e) => {
   const relativeX = e.clientX - canvas.offsetLeft;
   if (relativeX > 0 && relativeX < canvas.width) {
@@ -55,6 +71,14 @@ const mouseMoveHandler = (e) => {
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
+
+const restoreObjects = () => {
+  bricks.map((row) => {
+    return row.map((object) => {
+      return object.status = 1
+    });
+  });
+}
 
 const collisionDetection = () => {
   for (let c = 0; c < brickColumnCount; c += 1) {
@@ -68,7 +92,8 @@ const collisionDetection = () => {
           if (score === brickRowCount * brickColumnCount) {
             // eslint-disable-next-line no-alert
             level += 1;
-            console.log(level);
+            lives += 1;
+            restoreObjects();
           }
         }
       }
@@ -126,7 +151,7 @@ const drawLives = () => {
 const drawLevel = () => {
   ctx.font = '16px Arial';
   ctx.fillStyle = '#0095DD';
-  ctx.fillText(`Lives: ${level}`, canvas.width / 2, 20);
+  ctx.fillText(`Level: ${level}`, (canvas.width / 2) - 25, 20);
 };
 
 const draw = () => {
@@ -136,6 +161,7 @@ const draw = () => {
   drawPaddle();
   drawScore();
   drawLives();
+  drawLevel();
   collisionDetection();
 
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
