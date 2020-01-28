@@ -51,7 +51,7 @@ const keyDownHandler = (e) => {
   }
 };
 
-// this turns off the 
+// this turns off the click from the user input
 const keyUpHandler = (e) => {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
     rightPressed = false;
@@ -68,6 +68,7 @@ const mouseMoveHandler = (e) => {
   }
 };
 
+// This is waiting for some kind of user input, keydown (When clicked), keyup (when no longer clicked), mousemove "captures move movement"
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
@@ -75,7 +76,7 @@ document.addEventListener('mousemove', mouseMoveHandler, false);
 const restoreObjects = () => {
   bricks.map((row) => {
     return row.map((object) => {
-      return object.status = 1
+      return object.status = 2
     });
   });
 }
@@ -205,3 +206,59 @@ const draw = () => {
 };
 
 draw();
+
+
+class Ball {
+  constructor() {
+    this.x = 0
+    this.y = 0
+    this.dx = 2
+    this.dy = 2
+  }
+
+  move() {
+    this.x += this.dx
+  }
+
+  render(ctx) {
+    ctx.beginPath()
+  }
+}
+
+class Game {
+  constructor(levels){
+
+    this.gameCanvas = {
+      canvas: document.getElementById('myCanvas'),
+      ctx: canvas.getContext('2d')
+    }
+
+    this.level = level
+    this.lives = 3
+    this.
+
+    this.ball = new Ball()
+    this.ball.render(this.gameCanvas.ctx)
+    
+    this.ball = {
+      ballRadius: 10,
+      x: this.gameCanvas.canvas.width / 2,
+      y: this.gameCanvas.canvas.height - 30,
+      dx: 2,
+      dy: -2
+    }
+
+    this.paddle = {
+      paddleHeight: 10,
+      paddleWidth: 75,
+      paddleX: (this.gameCanvas.canvas.width - paddleWidth) / 2
+    }
+
+
+  }
+
+  drawGame = () =>{
+
+  }
+
+}
