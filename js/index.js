@@ -73,6 +73,7 @@ document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
+// this will restore the game bricks only for one turn. Trying to work out that quark. :/
 const restoreObjects = () => {
   bricks.map((row) => {
     return row.map((object) => {
@@ -81,6 +82,7 @@ const restoreObjects = () => {
   });
 }
 
+// checks for collision detection between the bricks and the ball
 const collisionDetection = () => {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
@@ -102,6 +104,7 @@ const collisionDetection = () => {
   }
 };
 
+// this function draws the ball
 const drawBall = () => {
   const randomColors = ['red', 'blue', 'green', 'orange', 'yellow', 'lightgray', 'pink'];
   const color = randomColors[Math.floor(Math.random() * randomColors.length)];
