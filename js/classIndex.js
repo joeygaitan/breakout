@@ -11,6 +11,14 @@ class Ball{
       this.dy = 2
     }
 
+    restoreObjects = () => {
+      this.bricks.map((row) => {
+        return row.map((object) => {
+          return object.status = 1
+        });
+      });
+    }
+
     render = (ctx) => {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.ballRadius, 0, Math.PI * 2);
@@ -18,13 +26,13 @@ class Ball{
       ctx.fill();
       ctx.closePath();
     }
-  }
+}
     
 class Paddle {
     constructor(){
         this.paddleHeight = 10;
         this.paddleWidth = 75;
-        this.paddleX = (canvas.width - paddleWidth) / 2;
+        this.paddleX = (canvas.width - this.paddleWidth) / 2;
     }
 
     render = (ctx) => {
@@ -35,7 +43,21 @@ class Paddle {
         ctx.closePath()
     }
 }
+
 class Brick {
+  constructor(){
+
+  }
+  render = (ctx) =>  {
+    ctx.beginPath();
+    ctx.rect(brickX, brickY, brickWidth, brickHeight);
+    ctx.fillStyle = '#0095DD';
+    ctx.fill();
+    ctx.closePath();
+  }
+}
+
+class Bricks { // 
     constructor(){
         this.brickRowCount = 5;
         this.brickWidth = 75;
@@ -56,6 +78,10 @@ class Brick {
             this.bricks[c] = [];
             for (let r = 0; r < this.brickRowCount; r += 1) {
               this.bricks[c][r] = { x: 0, y: 0, status: 1 };
+              this.brickX = (r * (this.brickWidth + this.brickPadding)) + this.brickOffsetLeft;
+              this.brickY = (c * (this.brickHeight + this.brickPadding)) + this.brickOffsetTop;
+              
+              // this.bricks[c][r] = new Brick(brickX, brickY)
             }
         }
     }
@@ -64,16 +90,21 @@ class Brick {
         for (let c = 0; c < this.brickColumnCount; c += 1) {
             for (let r = 0; r < this.brickRowCount; r += 1) {
               if (this.bricks[c][r].status === 1) {
+                // moved to bricks
                 this.brickX = (r * (brickWidth + brickPadding)) + brickOffsetLeft;
                 this.brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
                 this.bricks[c][r].x = brickX;
                 this.bricks[c][r].y = brickY;
 
+                // moved to Brick
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
                 ctx.fillStyle = '#0095DD';
                 ctx.fill();
                 ctx.closePath();
+                // replace with 
+                // this.bricks[c][r].render(ctx)
+
               }
             }
           }
@@ -111,8 +142,43 @@ class Lives {
 }
   class Game {
     constructor(){
+      this.rightPressed = false;
+      this.leftPressed = false;
+      
+      //
+      this.bricks = new Brick()
+      this.ball = new Ball()
+      this.paddle = new Paddle()
+      this.score = new Score()
+      this.lives = new Lives()
 
     }
+
+    // function to check for right error key
+    keyDownHandler = (e) => {
+        if (e.key === 'Right' || e.key === 'ArrowRight') {
+        rightPressed = true;
+        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        leftPressed = true;
+        }
+    };
+  
+  // this turns off the click from the user input
+    keyUpHandler = (e) => {
+        if (e.key === 'Right' || e.key === 'ArrowRight') {
+        rightPressed = false;
+        } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        leftPressed = false;
+        }
+    };
+  
+  // this will capture mouse movement
+    mouseMoveHandler = (e) => {
+        const relativeX = e.clientX - canvas.offsetLeft;
+        if (relativeX > 0 && relativeX < canvas.width) {
+        this.paddle.paddleX = relativeX - this.paddle.paddleWidth / 2;
+        }
+    };
 
     collisionDetection = () => {
         for (let c = 0; c < brickColumnCount; c += 1) {
@@ -127,7 +193,7 @@ class Lives {
                     // eslint-disable-next-line no-alert
                     level += 1;
                     lives += 1;
-                    restoreObjects();
+                    this.brick.restoreObjects();
                 }
                 }
             }
@@ -137,21 +203,12 @@ class Lives {
 
     draw = (ctx) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let brick = new Brick()
-        brick().intiateBrickArray().render()
-        let ball = new Ball()
-        ball.render()
-        // drawBall();
-        let paddle = new Paddle()
-        paddle.render()
-        // drawPaddle();
-        // drawScore();
-        let score = new Score()
-        score.render()
+        this.brick.intiateBrickArray().render()
+        this.ball.render()
+        this.paddle.render()
+        this.score.render()
         // drawLives();
-        let lives = new Lives()
-        lives.render()
-        // drawLevel();
+        this.lives.render()
         this.collisionDetection();
       
         if (this.ball.x + this.ball.dx > canvas.width - this.ball.ballRadius || this.ball.x + this.ball.dx < this.ball.ballRadius) {
@@ -183,17 +240,23 @@ class Lives {
           }
         }
       
-        if (rightPressed && paddleX < canvas.width - paddleWidth) {
-          paddleX += 7;
-        } else if (leftPressed && paddleX > 0) {
-          paddleX -= 7;
+        if (this.rightPressed && this.paddle.paddleX < canvas.width - this.paddle.paddleWidth) {
+          this.paddle.paddleX += 7;
+        } else if (this.leftPressed && this.paddle.paddleX > 0) {
+          this.paddle.paddleX -= 7;
         }
       
-        x += dx;
-        y += dy;
-        requestAnimationFrame(draw);
+        this.ball.x += this.ball.dx;
+        this.ball.y += this.ball.dy;
+        requestAnimationFrame(this.draw());
     };
 }
 
-let ball = new Ball()
-let bricks = new Bricks()
+let game = new Game()
+
+// This is waiting for some kind of user input, keydown (When clicked), keyup (when no longer clicked), mousemove "captures move movement"
+document.addEventListener('keydown', game.keyDownHandler, false);
+document.addEventListener('keyup', game.keyUpHandler, false);
+document.addEventListener('mousemove', game.mouseMoveHandler, false);
+
+game.draw(ctx)
