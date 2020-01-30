@@ -90,7 +90,7 @@ const collisionDetection = () => {
           dy = -dy;
           b.status = 0;
           score += 1;
-          if (score === brickRowCount * brickColumnCount) {
+          if (score === (brickRowCount * brickColumnCount) + (level * 15)) {
             // eslint-disable-next-line no-alert
             level += 1;
             lives += 1;
@@ -206,84 +206,3 @@ const draw = () => {
 };
 
 draw();
-
-
-class Paddle {
-  constructor(color = 'red'){
-    this.color = color
-    this.paddleHeight = 10;
-    this.paddleWidth = 75;
-    this.paddleX = (canvas.width - paddleWidth) / 2;
-  }
-
-  render = (ctx) => {
-    ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.closePath();
-  }
-}
-
-class Ball {
-  constructor(color = 'red') {
-    this.color = color
-    this.x = 0
-    this.y = 0
-    this.dx = 2
-    this.dy = 2
-    this.ballRadius = 10
-  }
-
-  move() {
-    this.x += this.dx
-  }
-
-
-
-  render = (ctx) => {
-    const color = this.color
-
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.closePath();
-  }
-}
-
-class Game {
-  constructor(levels, idTag){
-
-    this.canvas = document.getElementById(idTag),
-    this.ctx = getContext('2d')
-
-    this.level = 0
-    this.lives = 3
-    this.score = 0
-
-    this.ball = new Ball('red')
-    this.ball.render(this.gameCanvas.ctx)
-    
-    this.ball = {
-      ballRadius: 10,
-      x: this.gameCanvas.canvas.width / 2,
-      y: this.gameCanvas.canvas.height - 30,
-      dx: 2,
-      dy: -2
-    }
-
-    this.paddle = {
-      paddleHeight: 10,
-      paddleWidth: 75,
-      paddleX: (this.gameCanvas.canvas.width - paddleWidth) / 2
-    }
-
-
-  }
-
-  drawGame = () =>{
-
-  }
-
-}
