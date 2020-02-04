@@ -11,14 +11,6 @@ class Ball{
       this.dy = 2
     }
 
-    restoreObjects = () => {
-      this.bricks.map((row) => {
-        return row.map((object) => {
-          return object.status = 1
-        });
-      });
-    }
-
     render = (ctx) => {
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.ballRadius, 0, Math.PI * 2);
@@ -45,12 +37,15 @@ class Paddle {
 }
 
 class Brick {
-  constructor(){
-
+  constructor(brickX,brickY, brickWidth, brickHeight){
+    this.brickX = brickX,
+    this.brickY = brickY,
+    this.brickWidth = brickWidth,
+    this.brickHeight = brickHeight
   }
-  render = (ctx) =>  {
+  render = (ctx) => {
     ctx.beginPath();
-    ctx.rect(brickX, brickY, brickWidth, brickHeight);
+    ctx.rect(this.brickX, this.brickY, this.brickWidth, this.brickHeight);
     ctx.fillStyle = '#0095DD';
     ctx.fill();
     ctx.closePath();
@@ -59,34 +54,34 @@ class Brick {
 
 class Bricks { // 
     constructor(){
-        this.brickRowCount = 5;
-        this.brickWidth = 75;
-        this.brickColumnCount = 3;
-        this.brickHeight = 20;
-        this.brickPadding = 10;
-        this.brickOffsetTop = 30;
-        this.brickOffsetLeft = 30;
-
-        this.brickX
-        this.brickY
-
-        this.bricks = []
+        this.brickColumnCount = 3,
+        this.brickRowCount = 5,
+        this.bricks = [],
+        this.brickWidth = 75,
+        this.brickHeight = 20,
+        this.brickPadding = 10,
+        this.brickOffsetTop = 30,
+        this.brickOffsetLeft = 30
     };
+
+    restoreObjects = () => {
+      this.bricks.map((row) => {
+        return row.map((object) => {
+          return object.status = 1
+        });
+      });
+    }
 
     intiateBrickArray = () =>{
         for (let c = 0; c < this.brickColumnCount; c += 1) {
             this.bricks[c] = [];
             for (let r = 0; r < this.brickRowCount; r += 1) {
               this.bricks[c][r] = { x: 0, y: 0, status: 1 };
-              this.brickX = (r * (this.brickWidth + this.brickPadding)) + this.brickOffsetLeft;
-              this.brickY = (c * (this.brickHeight + this.brickPadding)) + this.brickOffsetTop;
-              
-              // this.bricks[c][r] = new Brick(brickX, brickY)
             }
         }
     }
 
-    render = (ctx) => {
+    render = () => {
         for (let c = 0; c < this.brickColumnCount; c += 1) {
             for (let r = 0; r < this.brickRowCount; r += 1) {
               if (this.bricks[c][r].status === 1) {
@@ -97,14 +92,10 @@ class Bricks { //
                 this.bricks[c][r].y = brickY;
 
                 // moved to Brick
-                ctx.beginPath();
-                ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = '#0095DD';
-                ctx.fill();
-                ctx.closePath();
+                let brick = new Brick(brickX, brickY, this.brickWidth, this.brickHeight)
+                brick.render()
                 // replace with 
                 // this.bricks[c][r].render(ctx)
-
               }
             }
           }
@@ -146,7 +137,7 @@ class Lives {
       this.leftPressed = false;
       
       //
-      this.bricks = new Brick()
+      this.bricks = new Bricks()
       this.ball = new Ball()
       this.paddle = new Paddle()
       this.score = new Score()
@@ -203,13 +194,13 @@ class Lives {
 
     draw = (ctx) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.brick.intiateBrickArray().render()
-        this.ball.render()
-        this.paddle.render()
-        this.score.render()
+        this.bricks.intiateBrickArray.render
+        this.ball.render
+        this.paddle.render
+        this.score.render
         // drawLives();
-        this.lives.render()
-        this.collisionDetection();
+        this.lives.render
+        this.collisionDetections;
       
         if (this.ball.x + this.ball.dx > canvas.width - this.ball.ballRadius || this.ball.x + this.ball.dx < this.ball.ballRadius) {
           this.ball.dx = -this.ball.dx;
@@ -248,7 +239,7 @@ class Lives {
       
         this.ball.x += this.ball.dx;
         this.ball.y += this.ball.dy;
-        requestAnimationFrame(this.draw());
+        requestAnimationFrame(this.draw(ctx));
     };
 }
 
