@@ -192,7 +192,10 @@ class Lives {
         }
       };
 
-    draw = (ctx) => {
+    draw = () => {
+      console.log('in here');
+      
+      
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.bricks.intiateBrickArray.render
         this.ball.render
@@ -239,7 +242,7 @@ class Lives {
       
         this.ball.x += this.ball.dx;
         this.ball.y += this.ball.dy;
-        requestAnimationFrame(this.draw(ctx));
+        requestAnimationFrame(this.draw);
     };
 }
 
@@ -250,4 +253,4 @@ document.addEventListener('keydown', game.keyDownHandler, false);
 document.addEventListener('keyup', game.keyUpHandler, false);
 document.addEventListener('mousemove', game.mouseMoveHandler, false);
 
-game.draw(ctx)
+game.draw()
