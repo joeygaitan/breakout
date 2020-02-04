@@ -1,12 +1,24 @@
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
-class Ball{
-    constructor(radius = 10, color = 'red') {
+class Sprite {
+  constructor( x, y, height, width ){
+    this.x = x;
+    this.y = y;
+    this.paddleHeight = height
+    this.paddleWidth = width
+  }
+
+  
+}
+
+class Ball extends Sprite {
+    constructor(x, y, radius = 10, color = 'red') {
+      super(x, y);
       this.color = color
       this.ballRadius = radius
-      this.x = 0
-      this.y = 0
+      // this.x = 0
+      // this.y = 0
       this.dx = 2
       this.dy = 2
     }
@@ -19,29 +31,31 @@ class Ball{
       ctx.closePath();
     }
 }
+
+// new Ball(10, 20, 33, 'red')
     
-class Paddle {
-    constructor(){
-        this.paddleHeight = 10;
-        this.paddleWidth = 75;
-        this.paddleX = (canvas.width - this.paddleWidth) / 2;
+class Paddle extends Sprite {
+    constructor(height,width){
+        super(height, width)
+        this.paddleX = (canvas.width - this.width) / 2;
     }
 
     render = (ctx) => {
         ctx.beginPath();
-        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+        ctx.rect(paddleX, canvas.height - height, width, height);
         ctx.fillStyle = '#0095DD';
         ctx.fill();
         ctx.closePath()
     }
 }
 
-class Brick {
-  constructor(brickX,brickY, brickWidth, brickHeight){
+class Brick extends Sprite {
+  constructor(brickX, brickY, width, height){
+    super(width, height)
     this.brickX = brickX,
     this.brickY = brickY,
-    this.brickWidth = brickWidth,
-    this.brickHeight = brickHeight
+    this.brickWidth = width,
+    this.brickHeight = height
   }
   render = (ctx) => {
     ctx.beginPath();
@@ -72,7 +86,9 @@ class Bricks { //
       });
     }
 
-    intiateBrickArray = () =>{
+    intiateBrickArray = () => {
+      console.log("here");
+      
         for (let c = 0; c < this.brickColumnCount; c += 1) {
             this.bricks[c] = [];
             for (let r = 0; r < this.brickRowCount; r += 1) {
@@ -136,12 +152,11 @@ class Lives {
       this.rightPressed = false;
       this.leftPressed = false;
       
-      //
       this.bricks = new Bricks()
       this.ball = new Ball()
       this.paddle = new Paddle()
-      this.score = new Score()
-      this.lives = new Lives()
+      this.Score = new Score()
+      this.Lives = new Lives()
 
     }
 
@@ -171,20 +186,21 @@ class Lives {
         }
     };
 
+    //this checks for collision between the ball and the game
     collisionDetection = () => {
-        for (let c = 0; c < brickColumnCount; c += 1) {
-            for (let r = 0; r < brickRowCount; r += 1) {
-            const b = bricks[c][r];
+        for (let c = 0; c < this.bricks.brickColumnCount; c += 1) {
+            for (let r = 0; r < this.bricks.brickRowCount; r += 1) {
+            const b = this.bricks[c][r];
             if (b.status === 1) {
-                if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-                dy = -dy;
+                if (x > b.x && x < b.x + this.bricks.brickWidth && this.ball.y > b.y && this.ball.y < b.y + this.bricks.brickHeight) {
+                this.ball.dy = -this.ball.dy;
                 b.status = 0;
-                score += 1;
-                if (score === (brickRowCount * brickColumnCount) + (level * 15)) {
-                    // eslint-disable-next-line no-alert
-                    level += 1;
-                    lives += 1;
-                    this.brick.restoreObjects();
+                this.Score.score += 1;
+                if (this.Score.score === (this.bricks.brickRowCount * this.bricks.brickColumnCount)) {
+                    // eslint-disable-next-line no-alert  + (level * 15))
+                    // level += 1;
+                    this.Lives.lives += 1;
+                    // this.brick.restoreObjects();
                 }
                 }
             }
@@ -193,24 +209,20 @@ class Lives {
       };
 
     draw = () => {
-      console.log('in here');
-      
-      
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.bricks.intiateBrickArray.render
-        this.ball.render
-        this.paddle.render
-        this.score.render
-        // drawLives();
-        this.lives.render
-        this.collisionDetections;
+        this.bricks.intiateBrickArray().render(ctx)
+        this.ball.render(ctx)
+        this.paddle.render(ctx)
+        this.score.render(ctx)
+        this.lives.render(ctx)
+        this.collisionDetections(ctx)
       
         if (this.ball.x + this.ball.dx > canvas.width - this.ball.ballRadius || this.ball.x + this.ball.dx < this.ball.ballRadius) {
           this.ball.dx = -this.ball.dx;
         }
         if (this.ball.y + this.ball.dy < this.ball.ballRadius) {
             this.ball.dy = -this.ball.dy;
-        } else if (this.ball.y + dy > canvas.height - this.ball.ballRadius) {
+        } else if (this.ball.y + this.ball.dy > canvas.height - this.ball.ballRadius) {
           if (this.ball.x > this.paddle.paddleX && this.ball.x < this.paddle.paddleX + this.paddle.paddleWidth) {
             if (this.ball.ballRadius >= 1.5) {
               this.ball.ballRadius -= 1.5;
@@ -242,7 +254,7 @@ class Lives {
       
         this.ball.x += this.ball.dx;
         this.ball.y += this.ball.dy;
-        requestAnimationFrame(this.draw);
+        requestAnimationFrame(() =>{this.draw});
     };
 }
 
