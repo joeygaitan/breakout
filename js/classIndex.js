@@ -76,6 +76,7 @@ class Bricks { //
         this.brickPadding = 10,
         this.brickOffsetTop = 30,
         this.brickOffsetLeft = 30
+        this.intiateBrickArray()
     };
 
     restoreObjects = () => {
@@ -102,13 +103,13 @@ class Bricks { //
             for (let r = 0; r < this.brickRowCount; r += 1) {
               if (this.bricks[c][r].status === 1) {
                 // moved to bricks
-                this.brickX = (r * (brickWidth + brickPadding)) + brickOffsetLeft;
-                this.brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
-                this.bricks[c][r].x = brickX;
-                this.bricks[c][r].y = brickY;
+                this.brickX = (r * (this.brickWidth + this.brickPadding)) + this.brickOffsetLeft;
+                this.brickY = (c * (this.brickHeight + this.brickPadding)) + this.brickOffsetTop;
+                this.bricks[c][r].x = this.brickX;
+                this.bricks[c][r].y = this.brickY;
 
                 // moved to Brick
-                let brick = new Brick(brickX, brickY, this.brickWidth, this.brickHeight)
+                let brick = new Brick(this.sbrickX, this.brickY, this.brickWidth, this.brickHeight)
                 brick.render()
                 // replace with 
                 // this.bricks[c][r].render(ctx)
@@ -153,7 +154,8 @@ class Lives {
       this.leftPressed = false;
       
       this.bricks = new Bricks()
-      this.ball = new Ball()
+      // this.bricks.intiateBrickArray()
+      this.ball = new Ball( (canvas.width / 2), (canvas.height - 30), 10)
       this.paddle = new Paddle()
       this.Score = new Score()
       this.Lives = new Lives()
@@ -210,7 +212,7 @@ class Lives {
 
     draw = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        this.bricks.intiateBrickArray().render(ctx)
+        this.bricks.render(ctx)
         this.ball.render(ctx)
         this.paddle.render(ctx)
         this.score.render(ctx)
