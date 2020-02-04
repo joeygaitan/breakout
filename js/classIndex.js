@@ -42,7 +42,7 @@ class Paddle extends Sprite {
 
     render = (ctx) => {
         ctx.beginPath();
-        ctx.rect(paddleX, canvas.height - height, width, height);
+        ctx.rect(this.paddleX, canvas.height - this.height, this.width, this.height);
         ctx.fillStyle = '#0095DD';
         ctx.fill();
         ctx.closePath()
@@ -110,7 +110,7 @@ class Bricks { //
 
                 // moved to Brick
                 let brick = new Brick(this.sbrickX, this.brickY, this.brickWidth, this.brickHeight)
-                brick.render()
+                brick.render(ctx)
                 // replace with 
                 // this.bricks[c][r].render(ctx)
               }
@@ -256,7 +256,19 @@ class Lives {
       
         this.ball.x += this.ball.dx;
         this.ball.y += this.ball.dy;
-        requestAnimationFrame(() =>{this.draw});
+
+        // requestAnimationFrame(callback)
+        // requestAnimationFrame(() => {})
+
+        // requestAnimationFrame(() => {
+        //   this.draw()
+        // })
+
+        // requestAnimationFrame(this.draw)
+
+        requestAnimationFrame(() => {
+          this.draw()
+        });
     };
 }
 
