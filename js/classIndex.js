@@ -88,8 +88,6 @@ class Bricks { //
     }
 
     intiateBrickArray = () => {
-      console.log("here");
-      
         for (let c = 0; c < this.brickColumnCount; c += 1) {
             this.bricks[c] = [];
             for (let r = 0; r < this.brickRowCount; r += 1) {
@@ -133,7 +131,8 @@ class Score {
     render = (ctx) => {
         ctx.font = '16px Arial';
         ctx.fillStyle = '#0095DD';
-        ctx.fillText(`Score: ${score}`, 8, 20);
+        ctx.fillText(`Score: ${this.score}`, 8, 20);
+        
     }
 }
 
@@ -157,7 +156,7 @@ class Lives {
       // this.bricks.intiateBrickArray()
       this.ball = new Ball( (canvas.width / 2), (canvas.height - 30), 10)
       this.paddle = new Paddle()
-      this.Score = new Score()
+      this.score = new Score()
       this.Lives = new Lives()
 
     }
@@ -214,10 +213,10 @@ class Lives {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.bricks.render(ctx)
         this.ball.render(ctx)
-        this.paddle.render(ctx)
+        this.paddle.render(ctx)        
         this.score.render(ctx)
-        this.lives.render(ctx)
-        this.collisionDetections(ctx)
+        // this.lives.render(ctx)
+        this.collisionDetections
       
         if (this.ball.x + this.ball.dx > canvas.width - this.ball.ballRadius || this.ball.x + this.ball.dx < this.ball.ballRadius) {
           this.ball.dx = -this.ball.dx;
@@ -233,8 +232,8 @@ class Lives {
           } else {
             this.paddle.paddleWidth += 15;
             this.paddle.ballRadius += 2;
-            this.lives.lives -= 1;
-            if (!this.lives.lives) {
+            this.Lives.lives -= 1;
+            if (!this.Lives.lives) {
               // eslint-disable-next-line no-alert
               alert('GAME OVER');
               document.location.reload();
