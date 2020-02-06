@@ -149,7 +149,7 @@ class Lives {
     render = (ctx) => {
         ctx.font = '16px Arial';
         ctx.fillStyle = '#0095DD';
-        ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
+        ctx.fillText(`Lives: ${this.lives}`, canvas.width - 65, 20);
     }
 }
   class Game {
@@ -221,8 +221,8 @@ class Lives {
         this.ball.render(ctx)
         this.paddle.render(ctx)        
         this.score.render(ctx)
-        // this.Lives.render(ctx)
-        // this.collisionDetections()
+        this.Lives.render(ctx)
+        this.collisionDetections()
       
         if (this.ball.x + this.ball.dx > canvas.width - this.ball.ballRadius || this.ball.x + this.ball.dx < this.ball.ballRadius) {
           this.ball.dx = -this.ball.dx;
@@ -264,15 +264,6 @@ class Lives {
       
         this.ball.x += this.ball.dx;
         this.ball.y += this.ball.dy;
-
-        // requestAnimationFrame(callback)
-        // requestAnimationFrame(() => {})
-
-        // requestAnimationFrame(() => {
-        //   this.draw()
-        // })
-
-        // requestAnimationFrame(this.draw)
 
         requestAnimationFrame(() => {
           this.draw()
