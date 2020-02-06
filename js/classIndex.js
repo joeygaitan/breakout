@@ -2,11 +2,11 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 class Sprite {
-  constructor( x, y, height, width ){
+  constructor( x, y, height, width){
     this.x = x;
     this.y = y;
-    this.paddleHeight = height
-    this.paddleWidth = width
+    this._height = height
+    this._width = width
   }
 
   
@@ -35,14 +35,15 @@ class Ball extends Sprite {
 // new Ball(10, 20, 33, 'red')
     
 class Paddle extends Sprite {
-    constructor(height,width){
-        super(height, width)
-        this.paddleX = (canvas.width - this.width) / 2;
+    constructor(height, width){
+        super(0, 0, height, width);
+        this.paddleX = ((canvas.width - this.width) / 2);
     }
 
     render = (ctx) => {
         ctx.beginPath();
-        ctx.rect(this.paddleX, canvas.height - this.height, this.width, this.height);
+        console.log(this.width, this.height)
+        ctx.rect(this.paddleX, (canvas.height - this.height), this.width, this.height);
         ctx.fillStyle = '#0095DD';
         ctx.fill();
         ctx.closePath()
@@ -107,7 +108,6 @@ class Bricks { //
                 this.bricks[c][r].y = this.brickY;                
                 // moved to Brick
                 let brick = new Brick(this.brickX, this.brickY, this.brickWidth, this.brickHeight)
-                console.log(brick);
                 
                 brick.render(ctx)
                 // replace with 
