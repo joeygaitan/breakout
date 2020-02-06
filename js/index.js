@@ -7,16 +7,19 @@ class Sprite {
     this.y = y;
     this.height = height
     this.width = width
-    
   }
 
-  
+  randomColor = () => {
+   const randomColors = ['red', 'blue', 'green', 'orange', 'yellow', 'lightgray', 'pink','grey','brown'];
+   const color = randomColors[Math.floor(Math.random() * randomColors.length)];
+   return color; 
+  }
 }
 
 class Ball extends Sprite {
     constructor(x, y, radius = 10, color = 'red') {
       super(x, y);
-      this.color = color
+      this.color = this.randomColor()
       this.ballRadius = radius
       // this.x = 0
       // this.y = 0
@@ -55,24 +58,29 @@ class Paddle extends Sprite {
 }
 
 class Brick extends Sprite {
-  constructor(brickX, brickY, width, height){
+  constructor(brickX, brickY, width, height, color = '#0095DD'){
     super(width, height)
-    this.brickX = brickX,
-    this.brickY = brickY,
-    this.brickWidth = width,
+    this.brickX = brickX
+    this.brickY = brickY
+    this.brickWidth = width
     this.brickHeight = height
+    this.color = color
   }
   render = (ctx) => {
     ctx.beginPath();
     ctx.rect(this.brickX, this.brickY, this.brickWidth, this.brickHeight);
-    ctx.fillStyle = '#0095DD';
+    ctx.fillStyle = this.color;
     ctx.fill();
     ctx.closePath();
   }
 }
 
-class Bricks { // 
+class Bricks extends Sprite{ // 
     constructor(){
+       super()
+
+       this.color = this.randomColor()
+
         this.brickColumnCount = 3,
         this.brickRowCount = 5,
         this.bricks = [],
@@ -96,7 +104,7 @@ class Bricks { //
         for (let c = 0; c < this.brickColumnCount; c += 1) {
             this.bricks[c] = [];
             for (let r = 0; r < this.brickRowCount; r += 1) {
-              this.bricks[c][r] = { x: 0, y: 0, status: 1 };
+              this.bricks[c][r] = { x: 0, y: 0, status: 1, color:this.color };
             }
         }
     }
@@ -111,7 +119,7 @@ class Bricks { //
                 this.bricks[c][r].x = this.brickX;
                 this.bricks[c][r].y = this.brickY;                
                 // moved to Brick
-                let brick = new Brick(this.brickX, this.brickY, this.brickWidth, this.brickHeight)
+                let brick = new Brick(this.brickX, this.brickY, this.brickWidth, this.brickHeight, this.bricks[c][r].color)
                 
                 brick.render(ctx)
                 // replace with 
@@ -141,6 +149,18 @@ class Score {
     }
 }
 
+class Level {
+  constructor(){
+    this.level = 0;
+  }
+
+  render = (ctx) => {
+    ctx.font = '16px Arial';
+    ctx.fillStyle = '#0095DD';
+    ctx.fillText(`Level: ${this.level}`, (canvas.width / 2) - 25, 20);
+  }
+}
+
 class Lives {
     constructor(){
         this.lives = 3;
@@ -161,6 +181,7 @@ class Lives {
       // this.bricks.intiateBrickArray()
       this.ball = new Ball( (canvas.width / 2), (canvas.height - 30), 10)
       this.paddle = new Paddle(10, 75)
+      this.Level = new Level()
       this.Score = new Score()
       this.Lives = new Lives()
 
@@ -202,11 +223,16 @@ class Lives {
                 this.ball.dy = -this.ball.dy;
                 b.status = 0;
                 this.Score.score += 1;
-                if (this.Score.score === (this.bricks.brickRowCount * this.bricks.brickColumnCount)) {
-                    // eslint-disable-next-line no-alert  + (level * 15))
-                    // level += 1;
+                if (this.Score.score === (this.bricks.brickRowCount * this.bricks.brickColumnCount) + (this.Level.level * 15)) {
+                    // eslint-disable-next-line no-alert  )
+                    this.Level.level += 1;
                     this.Lives.lives += 1;
-                    // this.brick.restoreObjects();
+                    this.bricks.restoreObjects();
+                    if(this.Lives.lives % 5 === 0 || this.Level.level <= 5){
+                      if(this.paddle.width > 2) {
+                        this.paddle.width -= 2
+                      }
+                    }
                 }
                 }
             }
@@ -221,6 +247,7 @@ class Lives {
         this.ball.render(ctx)
         this.paddle.render(ctx)        
         this.Score.render(ctx)
+        this.Level.render(ctx)
         this.Lives.render(ctx)
         this.collisionDetection(ctx)
       
@@ -237,9 +264,8 @@ class Lives {
             }
             this.ball.dy = -this.ball.dy;
           } else {
-            console.log('here')
             // ???
-            this.paddle.paddleWidth += 15;
+            this.paddle.width += 15;
             this.paddle.ballRadius += 2;
             this.Lives.lives -= 1;
             if (!this.Lives.lives) {
