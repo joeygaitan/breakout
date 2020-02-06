@@ -161,7 +161,7 @@ class Lives {
       // this.bricks.intiateBrickArray()
       this.ball = new Ball( (canvas.width / 2), (canvas.height - 30), 10)
       this.paddle = new Paddle(10, 75)
-      this.score = new Score()
+      this.Score = new Score()
       this.Lives = new Lives()
 
     }
@@ -196,9 +196,9 @@ class Lives {
     collisionDetection = () => {
         for (let c = 0; c < this.bricks.brickColumnCount; c += 1) {
             for (let r = 0; r < this.bricks.brickRowCount; r += 1) {
-            const b = this.bricks[c][r];
+            const b = this.bricks.bricks[c][r];
             if (b.status === 1) {
-                if (x > b.x && x < b.x + this.bricks.brickWidth && this.ball.y > b.y && this.ball.y < b.y + this.bricks.brickHeight) {
+                if (this.ball.x > b.x && this.ball.x < b.x + this.bricks.brickWidth && this.ball.y > b.y && this.ball.y < b.y + this.bricks.brickHeight) {
                 this.ball.dy = -this.ball.dy;
                 b.status = 0;
                 this.Score.score += 1;
@@ -220,23 +220,24 @@ class Lives {
         this.bricks.render(ctx)
         this.ball.render(ctx)
         this.paddle.render(ctx)        
-        this.score.render(ctx)
+        this.Score.render(ctx)
         this.Lives.render(ctx)
-        this.collisionDetections()
+        this.collisionDetection(ctx)
       
         if (this.ball.x + this.ball.dx > canvas.width - this.ball.ballRadius || this.ball.x + this.ball.dx < this.ball.ballRadius) {
           this.ball.dx = -this.ball.dx;
         }
         if (this.ball.y + this.ball.dy < this.ball.ballRadius) {
-            this.ball.dy = -this.ball.dy;
+          this.ball.dy = -this.ball.dy;
         } else if (this.ball.y + this.ball.dy > canvas.height - this.ball.ballRadius) {
-          if (this.ball.x > this.paddle.paddleX && this.ball.x < this.paddle.paddleX + this.paddle.paddleWidth) {
+          if (this.ball.x > this.paddle.paddleX && this.ball.x < this.paddle.paddleX + this.paddle.width) {
+            
             if (this.ball.ballRadius >= 1.5) {
               this.ball.ballRadius -= 1.5;
             }
             this.ball.dy = -this.ball.dy;
           } else {
-
+            console.log('here')
             // ???
             this.paddle.paddleWidth += 15;
             this.paddle.ballRadius += 2;
