@@ -96,7 +96,7 @@ class Bricks { //
         }
     }
 
-    render = () => {
+    render = (ctx) => {
         for (let c = 0; c < this.brickColumnCount; c += 1) {
             for (let r = 0; r < this.brickRowCount; r += 1) {
               if (this.bricks[c][r].status === 1) {
@@ -104,10 +104,11 @@ class Bricks { //
                 this.brickX = (r * (this.brickWidth + this.brickPadding)) + this.brickOffsetLeft;
                 this.brickY = (c * (this.brickHeight + this.brickPadding)) + this.brickOffsetTop;
                 this.bricks[c][r].x = this.brickX;
-                this.bricks[c][r].y = this.brickY;
-
+                this.bricks[c][r].y = this.brickY;                
                 // moved to Brick
-                let brick = new Brick(this.sbrickX, this.brickY, this.brickWidth, this.brickHeight)
+                let brick = new Brick(this.brickX, this.brickY, this.brickWidth, this.brickHeight)
+                console.log(brick);
+                
                 brick.render(ctx)
                 // replace with 
                 // this.bricks[c][r].render(ctx)
@@ -125,7 +126,7 @@ class Background {
   
 class Score {
     constructor(){
-        this.score = 0;
+        this.score = 3;
     }
 
     render = (ctx) => {
@@ -155,7 +156,7 @@ class Lives {
       this.bricks = new Bricks()
       // this.bricks.intiateBrickArray()
       this.ball = new Ball( (canvas.width / 2), (canvas.height - 30), 10)
-      this.paddle = new Paddle()
+      this.paddle = new Paddle(10, 75)
       this.score = new Score()
       this.Lives = new Lives()
 
@@ -164,18 +165,18 @@ class Lives {
     // function to check for right error key
     keyDownHandler = (e) => {
         if (e.key === 'Right' || e.key === 'ArrowRight') {
-        rightPressed = true;
+        this.rightPressed = true;
         } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-        leftPressed = true;
+        this.leftPressed = true;
         }
     };
   
   // this turns off the click from the user input
     keyUpHandler = (e) => {
         if (e.key === 'Right' || e.key === 'ArrowRight') {
-        rightPressed = false;
+        this.rightPressed = false;
         } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-        leftPressed = false;
+        this.leftPressed = false;
         }
     };
   
