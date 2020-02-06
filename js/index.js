@@ -5,8 +5,9 @@ class Sprite {
   constructor( x, y, height, width){
     this.x = x;
     this.y = y;
-    this._height = height
-    this._width = width
+    this.height = height
+    this.width = width
+    
   }
 
   
@@ -35,14 +36,17 @@ class Ball extends Sprite {
 // new Ball(10, 20, 33, 'red')
     
 class Paddle extends Sprite {
-    constructor(height, width){
+    // new Paddle(10, 75)
+    constructor(height, width) {
         super(0, 0, height, width);
-        this.paddleX = ((canvas.width - this.width) / 2);
+
+        this.paddleX = (canvas.width - this.width) / 2
+        console.log(this.paddleX)
     }
 
     render = (ctx) => {
         ctx.beginPath();
-        console.log(this.width, this.height)
+        // console.log(this.paddleX, (canvas.width - this.width) / 2)
         ctx.rect(this.paddleX, (canvas.height - this.height), this.width, this.height);
         ctx.fillStyle = '#0095DD';
         ctx.fill();
@@ -212,12 +216,13 @@ class Lives {
 
     draw = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         this.bricks.render(ctx)
         this.ball.render(ctx)
         this.paddle.render(ctx)        
         this.score.render(ctx)
         // this.Lives.render(ctx)
-        this.collisionDetections
+        // this.collisionDetections()
       
         if (this.ball.x + this.ball.dx > canvas.width - this.ball.ballRadius || this.ball.x + this.ball.dx < this.ball.ballRadius) {
           this.ball.dx = -this.ball.dx;
@@ -231,6 +236,8 @@ class Lives {
             }
             this.ball.dy = -this.ball.dy;
           } else {
+
+            // ???
             this.paddle.paddleWidth += 15;
             this.paddle.ballRadius += 2;
             this.Lives.lives -= 1;
@@ -243,12 +250,13 @@ class Lives {
               this.ball.y = canvas.height - 30;
               this.ball.dx = 3;
               this.ball.dy = -3;
-              this.paddle.paddleX = (canvas.width - this.paddle.paddleWidth) / 2;
+
+              this.paddle.paddleX = (canvas.width - this.paddle.width) / 2;
             }
           }
         }
       
-        if (this.rightPressed && this.paddle.paddleX < canvas.width - this.paddle.paddleWidth) {
+        if (this.rightPressed && this.paddle.paddleX < canvas.width - this.paddle.width) {
           this.paddle.paddleX += 7;
         } else if (this.leftPressed && this.paddle.paddleX > 0) {
           this.paddle.paddleX -= 7;
