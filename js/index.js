@@ -209,7 +209,7 @@ class Lives {
     mouseMoveHandler = (e) => {
         const relativeX = e.clientX - canvas.offsetLeft;
         if (relativeX > 0 && relativeX < canvas.width) {
-        this.paddle.paddleX = relativeX - this.paddle.paddleWidth / 2;
+        this.paddle.paddleX = relativeX - this.paddle.width / 2;
         }
     };
 
