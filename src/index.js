@@ -216,7 +216,7 @@ class Lives {
         this.ball.render(ctx)
         this.paddle.render(ctx)        
         this.score.render(ctx)
-        // this.lives.render(ctx)
+        // this.Lives.render(ctx)
         this.collisionDetections
       
         if (this.ball.x + this.ball.dx > canvas.width - this.ball.ballRadius || this.ball.x + this.ball.dx < this.ball.ballRadius) {
