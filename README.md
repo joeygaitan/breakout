@@ -1,7 +1,9 @@
 ### Breakout Game
 
 #### Packages installed
-Bundle.js
+* Bundle.js
+* Babel
+* lite-server
 
 ### Ways of compacting
 * Bundler
