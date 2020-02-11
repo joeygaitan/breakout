@@ -266,7 +266,7 @@ class Lives {
           } else {
             // ???
             this.paddle.width += 15;
-            this.paddle.ballRadius += 2;
+            this.ball.ballRadius += 2;
             this.Lives.lives -= 1;
             if (!this.Lives.lives) {
               // eslint-disable-next-line no-alert
