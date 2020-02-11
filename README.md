@@ -3,7 +3,7 @@
 #### Packages installed
 * Bundle.js
 * Babel
-* lite-server
+* lite-server - not working currently
 
 ### Ways of compacting
 * Bundler
