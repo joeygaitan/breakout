@@ -2,7 +2,7 @@
 
 ## Deployed with surge
 
-url: breakout-j-g.surge.sh
+[https: http://break-out-j-g.surge.sh/](http://break-out-j-g.surge.sh/)
 
 #### Packages installed
 * Bundle.js
