@@ -16,6 +16,10 @@
 * bundle.js
 * Babel.js
 
+### Webpack setup
+
+1. 
+
 ### babel setup with webpack vanilla js
 
 1. Added in a .babelrc file to root directory

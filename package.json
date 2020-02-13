@@ -2,7 +2,7 @@
   "name": "breakout",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/bundle.js",
   "scripts": {
     "start": "lite-server",
     "develop": "webpack --mode development --watch",
